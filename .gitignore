@@ -26,3 +26,7 @@
 *.exe
 *.out
 *.app
+Makefile
+Makefile.old
+nbproject
+*~
