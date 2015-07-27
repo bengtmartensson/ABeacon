@@ -90,7 +90,7 @@ public:
     /**
      * Delete the instance.
      */
-    static void *deleteInstance() {
+    static void deleteInstance() {
         delete instance;
         instance == NULL;
     }
