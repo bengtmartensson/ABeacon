@@ -15,7 +15,7 @@ You should have received a copy of the GNU General Public License along with
 this program. If not, see http://www.gnu.org/licenses/.
 */
 
-/*
+/**
  * This class implements an AMX-compatible beacon on an Arduino with Ethernet
  * card (W5100 compatible).
  *
@@ -23,7 +23,7 @@ this program. If not, see http://www.gnu.org/licenses/.
  * function newInstance should be called, which returns a pointer to the newly
  * created instance, provided it has not been instantiated before.
  * The user then has to call the send() function on a regular basis,
- * e.g. every 10 to 60 seconds. See BeaconMain.cpp for an example.
+ * e.g. every 10 to 60 seconds. See example/Beacon.ino for an example.
  *
  * The class requires that the Ethernet has been setup before calling newInstance.
  * It then instantiates its own private EthernetUDP instance.
@@ -65,9 +65,9 @@ public:
     /**
      * Factory method for constructing a (the) instance of the Beacon.
      *
-     * @param hostname
-     * @param mac
-     * @param sdkClass
+     * @param hostname Hostname to be announced
+     * @param mac Hardware MAC address of the type xx-xx-xx-xx-xx-xx
+     * @param sdkClass Class to be announced
      * @param make
      * @param model
      * @param revision
@@ -96,8 +96,8 @@ public:
     }
 
     /**
-     * Have the instance send its message. The user has to insure that this is called
-     * on a "regular" basis.
+     * Have the instance broadcast its message. The user has to insure that this is called
+     * on a "regular" basis, normally every 10 to 60 seconds, not necessarily with high precision.
      */
     void send();
 };

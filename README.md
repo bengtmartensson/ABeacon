@@ -9,7 +9,7 @@ This is a singleton class, with no public constructor. Instead, the
 static "factory" function newInstance should be called, which returns
 a pointer to the newly created instance, provided it has not been
 instantiated before.  The user then has to call the send() function on
-a regular basis, e.g. every 10 to 60 seconds. See BeaconMain.cpp for
+a regular basis, e.g. every 10 to 60 seconds. See examples/Beacon.ino for
 an example.
 
 The class requires that the Ethernet has been setup before calling newInstance.
