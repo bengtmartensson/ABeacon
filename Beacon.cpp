@@ -17,13 +17,11 @@ this program. If not, see http://www.gnu.org/licenses/.
 
 #include "Beacon.h"
 
-// This is the correct broadcast address:
+// The correct broadcast address is:
 //IPAddress Beacon::broadcastIp(239, 255, 250, 250);
 
-// however, the Arduino does not recognize it as broadcast, so use this instead.
+// However, the Arduino does not recognize it as broadcast, so use this instead.
 const IPAddress Beacon::broadcastIp(255, 255, 255, 255);
-
-const uint16_t Beacon::broadcastPort = 9131;
 
 Beacon *Beacon::instance = NULL;
 
@@ -31,6 +29,7 @@ String Beacon::pack(const char *key, String& value) {
     return value == NULL ? "" : ("<" + String(key) + "=" + value + ">");
 }
 
+// TODO: put the string literals in progmem.
 String Beacon::createPayload(String uuid, String utility, String make, String model,
         String revision, String configName, String configUrl) {
     return "AMXB"
@@ -44,23 +43,29 @@ String Beacon::createPayload(String uuid, String utility, String make, String mo
 }
 
 Beacon::Beacon(const char *hostname, const char *macAddress, const char *sdkClass, const char *make, const char *model,
-        const char *revision, const char *configName, const char *configUrl) {
+        const char *revision, const char *configName, const char *configUrl) : lastSendTime(0UL) {
     udp.begin(broadcastPort); // ??? Arduino stupidity (?) -- I do not want a port to listen to.
     payload = createPayload(String(hostname) + "@" + String(macAddress), sdkClass, make, model, revision, configName, configUrl);
 }
 
-Beacon *Beacon::newInstance(const char *hostname, const char *mac, const char *sdkClass,
+void Beacon::setup(const char *hostname, const char *mac, const char *sdkClass,
             const char *make, const char *model, const char *revision,
             const char *configName, const char *configUrl) {
     if (instance != NULL) // already instantiated
-        return NULL;
+        return; // should throw exception...
 
     instance = new Beacon(hostname, mac, sdkClass, make, model, revision, configName, configUrl);
-    return instance;
 }
 
-void Beacon::send() {
+void Beacon::sendInstance() {
     udp.beginPacket(broadcastIp, broadcastPort);
     udp.write(payload.c_str());
     udp.endPacket();
+}
+
+void Beacon::checkSendInstance() {
+    if (millis() - lastSendTime >= checkSendInterval) {
+        lastSendTime = millis();
+        send();
+    }
 }

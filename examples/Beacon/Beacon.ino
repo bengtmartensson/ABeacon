@@ -3,8 +3,9 @@
  *
  * 1. Initialize Ethernet.
  * 2. Initialize with  Beacon::newInstance(...) (This is a singleton class with no public constructor.)
- * 3. the send() function must be called "every now and then", e.g. once every 10 to 60 seconds, not necessarily
- * with great precision.
+ * 3. the send() function must be called "every now and then", e.g. once every 10 to 60 seconds,
+ * not necessarily with great precision.
+ * Alternatively, call checkSend() as often as you like.
  */
 
 
@@ -40,12 +41,10 @@ void setup() {
 #endif // !DHCP
     // Initialize the singleton class Beacon.
     // It will initialize a private UDP socket.
-    Beacon::newInstance("arduino", "DE-AD-BE-EF-FE-ED", "Utility", "www.harctoolbox.org",
+    Beacon::setup("arduino", "DE-AD-BE-EF-FE-ED", "Utility", "www.harctoolbox.org",
             "", "", "", "http://arduino/nosuchfile.html");
 }
 
 void loop() {
-    // Call the send function of the Beacon in regular (or irregular :-)) intervals
-    Beacon::getInstance()->send();
-    delay(10000);
+    Beacon::checkSend();
 }
