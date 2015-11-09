@@ -38,6 +38,8 @@ this program. If not, see http://www.gnu.org/licenses/.
 #ifndef BEACON_H
 #define	BEACON_H
 
+#define DEBUG
+
 #include <Arduino.h>
 #include <Ethernet.h>
 #include <EthernetUdp.h>
@@ -49,7 +51,7 @@ private:
 
     /** Minimal interval to send messages if using checkSend(). */
     static const unsigned long checkSendInterval = 20000UL;
-    unsigned long lastSendTime;
+    long lastSendTime;
 
     static Beacon *instance;
 

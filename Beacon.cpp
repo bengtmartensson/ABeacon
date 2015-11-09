@@ -43,7 +43,8 @@ String Beacon::createPayload(String uuid, String utility, String make, String mo
 }
 
 Beacon::Beacon(const char *hostname, const char *macAddress, const char *sdkClass, const char *make, const char *model,
-        const char *revision, const char *configName, const char *configUrl) : lastSendTime(0UL) {
+        const char *revision, const char *configName, const char *configUrl)
+: lastSendTime(-checkSendInterval) /* Insures that checkSendInstance sends first time */ {
     udp.begin(broadcastPort); // ??? Arduino stupidity (?) -- I do not want a port to listen to.
     payload = createPayload(String(hostname) + "@" + String(macAddress), sdkClass, make, model, revision, configName, configUrl);
 }
@@ -61,6 +62,10 @@ void Beacon::sendInstance() {
     udp.beginPacket(broadcastIp, broadcastPort);
     udp.write(payload.c_str());
     udp.endPacket();
+#ifdef DEBUG
+    static long n = 0;
+    Serial.println(++n);
+#endif
 }
 
 void Beacon::checkSendInstance() {

@@ -12,6 +12,7 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <Ethernet.h>
+#define DEBUG
 #include <Beacon.h>
 
 // Use DHCP in this example. Some say that it takes much memory...
@@ -43,8 +44,13 @@ void setup() {
     // It will initialize a private UDP socket.
     Beacon::setup("arduino", "DE-AD-BE-EF-FE-ED", "Utility", "www.harctoolbox.org",
             "", "", "", "http://arduino/nosuchfile.html");
+#ifdef DEBUG
+    Serial.begin(115200);
+#endif
 }
 
 void loop() {
-    Beacon::checkSend();
+    //Beacon::checkSend();
+    Beacon::send();
+    delay(1000);
 }
