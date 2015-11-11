@@ -48,6 +48,7 @@ class Beacon {
 private:
     static const IPAddress broadcastIp; // = "239.255.250.250";
     static const uint16_t broadcastPort = 9131;
+    static const uint16_t dummyPort = 65000U;
 
     /** Minimal interval to send messages if using checkSend(). */
     static const unsigned long checkSendInterval = 20000UL;
@@ -55,12 +56,15 @@ private:
 
     static Beacon *instance;
 
-    String payload;
+    char *payload;
     EthernetUDP udp;
 
-    String pack(const char *key, String& value);
-    String createPayload(String uuid, String utility, String make, String model,
-            String revision, String configName, String configUrl);
+    void doOne(const char *str);
+    void doPair(const char *key, const char *value);
+    void doPair(const char *key, const char *value, const char *value2);
+    void createPayload(const char *hostname, const char *macaddress, const char *utility,
+            const char *make, const char *model,
+            const char *revision, const char *configName, const char *configUrl);
 
     Beacon(const char *hostname, const char *mac, const char *sdkClass,
             const char *make, const char *model, const char *revision,

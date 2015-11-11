@@ -16,6 +16,7 @@ this program. If not, see http://www.gnu.org/licenses/.
 */
 
 #include "Beacon.h"
+#include <string.h>
 
 // The correct broadcast address is:
 //IPAddress Beacon::broadcastIp(239, 255, 250, 250);
@@ -25,28 +26,53 @@ const IPAddress Beacon::broadcastIp(255, 255, 255, 255);
 
 Beacon *Beacon::instance = NULL;
 
-String Beacon::pack(const char *key, String& value) {
-    return value == NULL ? "" : ("<" + String(key) + "=" + value + ">");
+void Beacon::doPair(const char *key, const char *value) {
+    if (value != NULL && value[0] != '\0') {
+        doOne("<");
+        doOne(key);
+        doOne("=");
+        doOne(value);
+        doOne(">");
+    }
+}
+
+void Beacon::doPair(const char *key, const char *value, const char *value2) {
+        doOne("<");
+        doOne(key);
+        doOne("=");
+        doOne(value);
+        doOne("@");
+        doOne(value2);
+        doOne(">");
+}
+
+void Beacon::doOne(const char* str) {
+    strcat(payload, str);
 }
 
 // TODO: put the string literals in progmem.
-String Beacon::createPayload(String uuid, String utility, String make, String model,
-        String revision, String configName, String configUrl) {
-    return "AMXB"
-            + pack("-UUID", uuid)
-            + pack("-SDKClass", utility)
-            + pack("-Make", make)
-            + pack("-Model", model)
-            + pack("-Revision", revision)
-            + pack("Config-Name", configName)
-            + pack("Config-URL", configUrl) + "\r";
+
+void Beacon::createPayload(/*const char *uuid,*/ const char *hostname, const char *macaddress,
+        const char *utility, const char *make, const char *model,
+        const char *revision, const char *configName, const char *configUrl) {
+    payload = new char[150]; // FIXME
+    payload[0] = '\0';
+    doOne("AMXB");
+    doPair("-UUID", hostname, macaddress);
+    doPair("-SDKClass", utility);
+    doPair("-Make", make);
+    doPair("-Model", model);
+    doPair("-Revision", revision);
+    doPair("Config-Name", configName);
+    doPair("Config-URL", configUrl);
+    doOne("\r");
 }
 
 Beacon::Beacon(const char *hostname, const char *macAddress, const char *sdkClass, const char *make, const char *model,
         const char *revision, const char *configName, const char *configUrl)
 : lastSendTime(-checkSendInterval) /* Insures that checkSendInstance sends first time */ {
-    udp.begin(broadcastPort); // ??? Arduino stupidity (?) -- I do not want a port to listen to.
-    payload = createPayload(String(hostname) + "@" + String(macAddress), sdkClass, make, model, revision, configName, configUrl);
+    udp.begin(dummyPort); // ??? Arduino stupidity (?) -- I do not want a port to listen to.
+    createPayload(hostname /*+ "@" +*/, macAddress, sdkClass, make, model, revision, configName, configUrl);
 }
 
 void Beacon::setup(const char *hostname, const char *mac, const char *sdkClass,
@@ -60,11 +86,11 @@ void Beacon::setup(const char *hostname, const char *mac, const char *sdkClass,
 
 void Beacon::sendInstance() {
     udp.beginPacket(broadcastIp, broadcastPort);
-    udp.write(payload.c_str());
+    udp.write(payload);
     udp.endPacket();
 #ifdef DEBUG
-    static long n = 0;
-    Serial.println(++n);
+    static long n = 1;
+    Serial.println(n++);
 #endif
 }
 
