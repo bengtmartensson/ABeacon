@@ -38,7 +38,7 @@ this program. If not, see http://www.gnu.org/licenses/.
 #ifndef BEACON_H
 #define	BEACON_H
 
-#define DEBUG
+//#define DEBUG
 
 #include <Arduino.h>
 #include <Ethernet.h>

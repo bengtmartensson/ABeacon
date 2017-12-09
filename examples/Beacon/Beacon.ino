@@ -40,13 +40,13 @@ void setup() {
 #else
     Ethernet.begin(mac, IPAddress(IPADDRESS));
 #endif // !DHCP
+#ifdef DEBUG
+    Serial.begin(115200);
+#endif
     // Initialize the singleton class Beacon.
     // It will initialize a private UDP socket.
     Beacon::setup("arduino", "DE-AD-BE-EF-FE-ED", "Utility", "www.harctoolbox.org",
             "", "", "", "http://arduino/nosuchfile.html");
-#ifdef DEBUG
-    Serial.begin(115200);
-#endif
 }
 
 void loop() {

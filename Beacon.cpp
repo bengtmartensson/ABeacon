@@ -17,6 +17,7 @@ this program. If not, see http://www.gnu.org/licenses/.
 
 #include "Beacon.h"
 #include <string.h>
+#include <avr/pgmspace.h>
 
 // The correct broadcast address is:
 //IPAddress Beacon::broadcastIp(239, 255, 250, 250);
@@ -24,12 +25,20 @@ this program. If not, see http://www.gnu.org/licenses/.
 // However, the Arduino does not recognize it as broadcast, so use this instead.
 const IPAddress Beacon::broadcastIp(255, 255, 255, 255);
 
+const char configUrlLiteral[] PROGMEM = "Config-URL";
+const char uuidLiteral[] PROGMEM = "-UUID";
+const char sdkClassLiteral[] PROGMEM = "-SDKClass";
+const char makeLiteral[] PROGMEM = "-Make";
+const char modelLiteral[] PROGMEM = "-Model";
+const char revisionLiteral[] PROGMEM = "-Revision";
+const char configNameLiteral[] PROGMEM = "Config-Name";
+
 Beacon *Beacon::instance = NULL;
 
 void Beacon::doPair(const char *key, const char *value) {
     if (value != NULL && value[0] != '\0') {
         doOne("<");
-        doOne(key);
+        strcat_PF(payload, (uint_farptr_t) key);
         doOne("=");
         doOne(value);
         doOne(">");
@@ -37,13 +46,13 @@ void Beacon::doPair(const char *key, const char *value) {
 }
 
 void Beacon::doPair(const char *key, const char *value, const char *value2) {
-        doOne("<");
-        doOne(key);
-        doOne("=");
-        doOne(value);
-        doOne("@");
-        doOne(value2);
-        doOne(">");
+    doOne("<");
+    strcat_PF(payload, (uint_farptr_t) key);
+    doOne("=");
+    doOne(value);
+    doOne("@");
+    doOne(value2);
+    doOne(">");
 }
 
 void Beacon::doOne(const char* str) {
@@ -58,13 +67,13 @@ void Beacon::createPayload(/*const char *uuid,*/ const char *hostname, const cha
     payload = new char[150]; // FIXME
     payload[0] = '\0';
     doOne("AMXB");
-    doPair("-UUID", hostname, macaddress);
-    doPair("-SDKClass", utility);
-    doPair("-Make", make);
-    doPair("-Model", model);
-    doPair("-Revision", revision);
-    doPair("Config-Name", configName);
-    doPair("Config-URL", configUrl);
+    doPair(uuidLiteral, hostname, macaddress);
+    doPair(sdkClassLiteral, utility);
+    doPair(makeLiteral, make);
+    doPair(modelLiteral, model);
+    doPair(revisionLiteral, revision);
+    doPair(configNameLiteral, configName);
+    doPair(configUrlLiteral, configUrl);
     doOne("\r");
 }
 
