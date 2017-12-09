@@ -1,7 +1,10 @@
 # ABeacon
 
 This project consists of a class implementing an AMX-compatible beacon
-on an Arduino with Ethernet card (W5100 compatible).
+on an Arduino with Ethernet card.
+Both the new Ethernet2 library (supporting W5500 chip shields) and the
+old Ethernet library are supported. To use the Ethernet2 library, define
+`ETHERNET_REVISION` to 2 in `Beacon.h`.
 
 The AMX beacon protocol is described e.g. [here](http://www.globalcache.com/files/docs/API-GC-100.pdf).
 

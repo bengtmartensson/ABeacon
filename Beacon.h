@@ -33,16 +33,28 @@ this program. If not, see http://www.gnu.org/licenses/.
  * port 9131. However, the Arduino library does not consider this IP address to be a
  * broadcast address. Therefore, this implementation instead sends to broadcast address
  * 255.255.255.255.
+ * 
+ * Define ETHERNET_REVISION to 2 to use the new Ethernet2 library, supporting W5500 cards.
+ * Otherwise, the old Ethernet library will be used.
  */
 
 #ifndef BEACON_H
 #define	BEACON_H
 
+#ifndef ETHERNET_REVISION
+#define ETHERNET_REVISION 1
+#endif
+
 //#define DEBUG
 
 #include <Arduino.h>
+#if defined(ETHERNET_REVISION) & (ETHERNET_REVISION == 2)
+#include <Ethernet2.h>
+#include <EthernetUdp2.h>
+#else
 #include <Ethernet.h>
 #include <EthernetUdp.h>
+#endif
 
 class Beacon {
 private:

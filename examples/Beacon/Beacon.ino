@@ -6,12 +6,13 @@
  * 3. the send() function must be called "every now and then", e.g. once every 10 to 60 seconds,
  * not necessarily with great precision.
  * Alternatively, call checkSend() as often as you like.
+ *
+ * Define ETHERNET_REVISION to 2 in Beacon.h to use the Ethernet2 library
+ * (for W5500 chip cards) instead of the old Ethernet library.
  */
-
 
 #include <Arduino.h>
 #include <SPI.h>
-#include <Ethernet.h>
 #define DEBUG
 #include <Beacon.h>
 
