@@ -38,8 +38,7 @@ this program. If not, see http://www.gnu.org/licenses/.
  * Otherwise, the old Ethernet library will be used.
  */
 
-#ifndef BEACON_H
-#define	BEACON_H
+#pragma once
 
 #ifndef ETHERNET_REVISION
 #define ETHERNET_REVISION 1
@@ -131,5 +130,3 @@ public:
         instance->checkSendInstance();
     }
 };
-
-#endif	/* BEACON_H */
