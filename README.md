@@ -22,3 +22,15 @@ The beacon should transmit an UDP broadcast message to IP-address
 239.255.250.250, port 9131. However, the Arduino library does not
 consider this IP address to be a broadcast address. Therefore, this
 implementation instead sends to broadcast address 255.255.255.255.
+
+## Porting to other libraries/platforms
+
+I am interesting in (clean) ports to other libraries and platforms.
+For this, the calls
+
+* Udp.begin(uint16_t portNr)   -- really necessary?
+* Udp.beginPacket(const IPAddress broadcastIp, uint16_t broadcastPort)
+* Udp.write(const char* payload)
+* Udp.endPacket()
+
+are used. Pull requests are welcome!
