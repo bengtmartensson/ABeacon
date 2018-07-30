@@ -17,7 +17,7 @@ this program. If not, see http://www.gnu.org/licenses/.
 
 /**
  * This class implements an AMX-compatible beacon on an Arduino with Ethernet
- * card (W5100 compatible).
+ * card (W5100 or W5500 compatible).
  *
  * This is a singleton class, with no public constructor. Instead, the static "factory"
  * function setup() be called.
@@ -33,9 +33,11 @@ this program. If not, see http://www.gnu.org/licenses/.
  * port 9131. However, the Arduino library does not consider this IP address to be a
  * broadcast address. Therefore, this implementation instead sends to broadcast address
  * 255.255.255.255.
- * 
- * Define ETHERNET_REVISION to 2 to use the new Ethernet2 library, supporting W5500 cards.
- * Otherwise, the old Ethernet library will be used.
+ *
+ * Define ETHERNET_REVISION to 2 to use the new Ethernet2 library,
+ * (for W5500 chip cards) instead of the old Ethernet library.
+ * However, it is better to use version 2.0.0 (or later) of the "Ethernet"
+ * library, since it supports both chips, auto-detecting during runtime.
  */
 
 #pragma once
