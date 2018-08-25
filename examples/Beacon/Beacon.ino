@@ -7,10 +7,6 @@
  * not necessarily with great precision.
  * Alternatively, call checkSend() as often as you like.
  *
- * Define ETHERNET_REVISION to 2 in Beacon.h to use the Ethernet2 library
- * (for W5500 chip cards) instead of the old Ethernet library.
- * However, it is better to use version 2.0.0 (or later) of the "Ethernet"
- * library, since it supports both chips, auto-detecting during runtime.
  */
 
 #include <Arduino.h>
