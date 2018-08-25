@@ -1,5 +1,7 @@
 nbproject
 html
 *~
-Makefile
 *.old
+api-doc
+xml
+gh-pages
